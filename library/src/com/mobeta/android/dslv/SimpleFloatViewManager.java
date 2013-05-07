@@ -1,13 +1,12 @@
 package com.mobeta.android.dslv;
 
 import android.graphics.Bitmap;
-import android.graphics.Point;
 import android.graphics.Color;
-import android.widget.ListView;
-import android.widget.ImageView;
+import android.graphics.Point;
 import android.view.View;
 import android.view.ViewGroup;
-import android.util.Log;
+import android.widget.ImageView;
+import android.widget.ListView;
 
 /**
  * Simple implementation of the FloatViewManager class. Uses list
@@ -39,7 +38,8 @@ public class SimpleFloatViewManager implements DragSortListView.FloatViewManager
     public View onCreateFloatView(int position) {
         // Guaranteed that this will not be null? I think so. Nope, got
         // a NullPointerException once...
-        View v = mListView.getChildAt(position + mListView.getHeaderViewsCount() - mListView.getFirstVisiblePosition());
+        View v = mListView.getChildAt(position + mListView.getHeaderViewsCount() 
+        		- mListView.getFirstVisiblePosition());
 
         if (v == null) {
             return null;
@@ -47,6 +47,7 @@ public class SimpleFloatViewManager implements DragSortListView.FloatViewManager
 
         v.setPressed(false);
 
+        // TODO: Add ability to set drawable (not just colour) for float bitmap
         // Create a copy of the drawing cache so that it does not get
         // recycled by the framework when the list tries to clean up memory
         //v.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
@@ -65,12 +66,9 @@ public class SimpleFloatViewManager implements DragSortListView.FloatViewManager
         return mImageView;
     }
 
-    /**
-     * This does nothing
-     */
     @Override
     public void onDragFloatView(View floatView, Point position, Point touch) {
-        // do nothing
+        // Do nothing so we have a concrete class
     }
 
     /**
