@@ -47,10 +47,8 @@ public class SimpleFloatViewManager implements DragSortListView.FloatViewManager
 
         v.setPressed(false);
 
-        // TODO: Add ability to set drawable (not just colour) for float bitmap
         // Create a copy of the drawing cache so that it does not get
         // recycled by the framework when the list tries to clean up memory
-        //v.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
         v.setDrawingCacheEnabled(true);
         mFloatBitmap = Bitmap.createBitmap(v.getDrawingCache());
         v.setDrawingCacheEnabled(false);

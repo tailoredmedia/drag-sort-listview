@@ -75,7 +75,9 @@ public abstract class ResourceDragSortCursorAdapter extends DragSortCursorAdapte
      *                    cursor whenever it changes so the most recent
      *                    data is always displayed.  Using true here is discouraged.
      */
-    public ResourceDragSortCursorAdapter(Context context, int layout, Cursor c, boolean autoRequery) {
+    public ResourceDragSortCursorAdapter(Context context, int layout, Cursor c, 
+            boolean autoRequery) {
+        
         super(context, c, autoRequery);
         mLayout = mDropDownLayout = layout;
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);

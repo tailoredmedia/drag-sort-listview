@@ -816,7 +816,9 @@ public class DragSortListView extends ListView {
             canvas.translate(mFloatLoc.x, mFloatLoc.y);
             canvas.clipRect(0, 0, floatViewWidth, floatViewHeight);
 
-            canvas.saveLayerAlpha(0, 0, floatViewWidth, floatViewHeight, alpha, Canvas.ALL_SAVE_FLAG);
+            canvas.saveLayerAlpha(0, 0, floatViewWidth, floatViewHeight, alpha, 
+                    Canvas.ALL_SAVE_FLAG);
+
             mFloatView.draw(canvas);
             canvas.restore();
             canvas.restore();
@@ -898,7 +900,6 @@ public class DragSortListView extends ListView {
      * dropped immediately below this line, it lands in position.
      */
     private int getShuffleEdge(int position, int top) {
-
         final int numHeaders = getHeaderViewsCount();
         final int numFooters = getFooterViewsCount();
 
@@ -957,7 +958,6 @@ public class DragSortListView extends ListView {
     }
 
     private boolean updatePositions() {
-
         final int first = getFirstVisiblePosition();
         int startPos = mFirstExpPos;
         View startView = getChildAt(startPos - first);
@@ -1386,7 +1386,6 @@ public class DragSortListView extends ListView {
      */
     public void removeItem(int which, float velocityX) {
         if (mDragState == IDLE || mDragState == DRAGGING) {
-
             if (mDragState == IDLE) {
                 // called from outside drag-sort
                 mSrcPos = getHeaderViewsCount() + which;
@@ -1863,7 +1862,6 @@ public class DragSortListView extends ListView {
         }
 
         // Finally adjust item visibility
-
         int oldVis = v.getVisibility();
         int vis = View.VISIBLE;
 
@@ -1939,7 +1937,6 @@ public class DragSortListView extends ListView {
         }
 
         ViewGroup.LayoutParams lp = child.getLayoutParams();
-
         if (lp != null) {
             if (lp.height > 0) {
                 return lp.height;
@@ -1947,7 +1944,6 @@ public class DragSortListView extends ListView {
         }
 
         int childHeight = child.getHeight();
-
         if (childHeight == 0 || invalidChildHeight) {
             measureItem(child);
             childHeight = child.getMeasuredHeight();
@@ -2053,6 +2049,7 @@ public class DragSortListView extends ListView {
             		ViewGroup.LayoutParams.WRAP_CONTENT);
             item.setLayoutParams(lp);
         }
+
         int wspec = ViewGroup.getChildMeasureSpec(mWidthMeasureSpec, getListPaddingLeft()
                 + getListPaddingRight(), lp.width);
         int hspec;
@@ -2490,10 +2487,10 @@ public class DragSortListView extends ListView {
     public interface DragSortListener extends DropListener, DragListener, RemoveListener {
     }
 
-    public void setDragSortListener(DragSortListener l) {
-        setDropListener(l);
-        setDragListener(l);
-        setRemoveListener(l);
+    public void setDragSortListener(DragSortListener listener) {
+        setDropListener(listener);
+        setDragListener(listener);
+        setRemoveListener(listener);
     }
 
     /**
@@ -2501,11 +2498,11 @@ public class DragSortListView extends ListView {
      * with position and is constant in time. Create your own by implementing
      * {@link DragSortListView.DragScrollProfile}.
      * 
-     * @param ssp
+     * @param scrollProfile
      */
-    public void setDragScrollProfile(DragScrollProfile ssp) {
-        if (ssp != null) {
-            mScrollProfile = ssp;
+    public void setDragScrollProfile(DragScrollProfile scrollProfile) {
+        if (scrollProfile != null) {
+            mScrollProfile = scrollProfile;
         }
     }
 
@@ -2628,8 +2625,9 @@ public class DragSortListView extends ListView {
         }
     }
 
-    private static int buildRunList(SparseBooleanArray cip, int rangeStart,
-            int rangeEnd, int[] runStart, int[] runEnd) {
+    private static int buildRunList(SparseBooleanArray cip, int rangeStart, int rangeEnd, 
+            int[] runStart, int[] runEnd) {
+        
         int runCount = 0;
 
         int i = findFirstSetIndex(cip, rangeStart, rangeEnd);

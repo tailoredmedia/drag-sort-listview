@@ -60,12 +60,8 @@ public class DragSortItemView extends ViewGroup {
         }
     }
 
-    /**
-     * 
-     */
     @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {        
         int height = MeasureSpec.getSize(heightMeasureSpec);
         int width = MeasureSpec.getSize(widthMeasureSpec);
 

@@ -94,11 +94,15 @@ public class DragSortController extends SimpleFloatViewManager implements View.O
         this(dslv, 0, ON_DOWN, FLING_REMOVE);
     }
 
-    public DragSortController(DragSortListView dslv, int dragHandleId, int dragInitMode, int removeMode) {
+    public DragSortController(DragSortListView dslv, int dragHandleId, int dragInitMode, 
+            int removeMode) {
+
         this(dslv, dragHandleId, dragInitMode, removeMode, 0);
     }
 
-    public DragSortController(DragSortListView dslv, int dragHandleId, int dragInitMode, int removeMode, int clickRemoveId) {
+    public DragSortController(DragSortListView dslv, int dragHandleId, int dragInitMode, 
+            int removeMode, int clickRemoveId) {
+
         this(dslv, dragHandleId, dragInitMode, removeMode, clickRemoveId, 0);
     }
 
@@ -111,6 +115,7 @@ public class DragSortController extends SimpleFloatViewManager implements View.O
      */
     public DragSortController(DragSortListView dslv, int dragHandleId, int dragInitMode,
             int removeMode, int clickRemoveId, int flingHandleId) {
+
         super(dslv);
         mDslv = dslv;
         mDetector = new GestureDetector(dslv.getContext(), this);
@@ -307,7 +312,6 @@ public class DragSortController extends SimpleFloatViewManager implements View.O
      * if a drag handle touch was detected.
      *
      * @param ev The ACTION_DOWN MotionEvent.
-
      * @return The list position of the item whose drag handle was
      * touched; MISS if unsuccessful.
      */
@@ -390,7 +394,8 @@ public class DragSortController extends SimpleFloatViewManager implements View.O
                 if (mDragInitMode == ON_DRAG && Math.abs(y2 - y1) > mTouchSlop && mSortEnabled) {
                     startDrag(mHitPos, deltaX, deltaY);
                 }
-                else if (mDragInitMode != ON_DOWN && Math.abs(x2 - x1) > mTouchSlop && mRemoveEnabled)
+                else if (mDragInitMode != ON_DOWN && Math.abs(x2 - x1) > mTouchSlop 
+                        && mRemoveEnabled)
                 {
                     mIsRemoving = true;
                     startDrag(mFlingHitPos, deltaX, deltaY);

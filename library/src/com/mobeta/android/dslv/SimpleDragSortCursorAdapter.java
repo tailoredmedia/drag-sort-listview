@@ -80,7 +80,9 @@ public class SimpleDragSortCursorAdapter extends ResourceDragSortCursorAdapter {
      * use {@link android.app.LoaderManager} with a {@link android.content.CursorLoader}.
      */
     @Deprecated
-    public SimpleDragSortCursorAdapter(Context context, int layout, Cursor c, String[] from, int[] to) {
+    public SimpleDragSortCursorAdapter(Context context, int layout, Cursor c, String[] from, 
+            int[] to) {
+
         super(context, layout, c);
         mTo = to;
         mOriginalFrom = from;
@@ -105,8 +107,9 @@ public class SimpleDragSortCursorAdapter extends ResourceDragSortCursorAdapter {
      * @param flags Flags used to determine the behavior of the adapter,
      * as per {@link CursorAdapter#CursorAdapter(Context, Cursor, int)}.
      */
-    public SimpleDragSortCursorAdapter(Context context, int layout,
-            Cursor c, String[] from, int[] to, int flags) {
+    public SimpleDragSortCursorAdapter(Context context, int layout, Cursor c, String[] from, 
+            int[] to, int flags) {
+        
         super(context, layout, c, flags);
         mTo = to;
         mOriginalFrom = from;
