@@ -49,6 +49,7 @@ import android.widget.BaseAdapter;
 import android.widget.Checkable;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.WrapperListAdapter;
 
 /**
  * ListView subclass that mediates drag and drop resorting of items.
@@ -635,29 +636,19 @@ public class DragSortListView extends ListView {
         if (mAdapterWrapper == null) {
             return null;
         } else {
-            return mAdapterWrapper.getAdapter();
+            return mAdapterWrapper.getWrappedAdapter();
         }
     }
 
-    private class AdapterWrapper extends BaseAdapter {
-        private ListAdapter mAdapter;
+    private class AdapterWrapper implements WrapperListAdapter {
+    	private ListAdapter mAdapter;
 
         public AdapterWrapper(ListAdapter adapter) {
-            super();
             mAdapter = adapter;
-            
-            mAdapter.registerDataSetObserver(new DataSetObserver() {
-                public void onChanged() {
-                    notifyDataSetChanged();
-                }
-
-                public void onInvalidated() {
-                    notifyDataSetInvalidated();
-                }
-            });
         }
 
-        public ListAdapter getAdapter() {
+        @Override
+        public ListAdapter getWrappedAdapter() {
             return mAdapter;
         }
 
@@ -743,6 +734,16 @@ public class DragSortListView extends ListView {
 
             return v;
         }
+
+		@Override
+		public void registerDataSetObserver(DataSetObserver observer) {
+			mAdapter.registerDataSetObserver(observer);			
+		}
+
+		@Override
+		public void unregisterDataSetObserver(DataSetObserver observer) {
+			mAdapter.unregisterDataSetObserver(observer);			
+		}
     }
 
     private void drawDivider(int expPosition, Canvas canvas) {
