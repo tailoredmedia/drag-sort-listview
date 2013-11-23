@@ -1,6 +1,11 @@
 Changelog
 =========
 
+0.6.2
+-----
+* Add gradle build files
+* Minor fixes & cleanups (see git log)
+
 0.6.1
 -----
 
@@ -13,7 +18,7 @@ DragSortController.
 -----
 
 * Remove modes are now `fling_remove` and `click_remove`.
- 
+
 0.5.0
 -----
 

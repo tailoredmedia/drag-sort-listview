@@ -1,60 +1,13 @@
 DragSortListView
 ================
 
-# NOTICE: No longer maintained.
+The original project is no longer maintained. I intend to maintain this fork of the project to a limited extent.
+The following things I intend to maintain:
+* API levels
+* Compatibility with Android Studio
+* Bugs if found
 
-I do not have much time to devote to this project so I am
-dropping support for the time being. Sorry everybody!
-
-News
-----
-
-**April 2, 2013**: Hey all. If you want to send a pull request,
-please read the [Contributing](https://github.com/bauerca/drag-sort-listview#contributing) section first. Thanks!
-
-**Feb. 9, 2013**: Version 0.6.0. Consolidated remove modes to
-`click_remove` and `fling_remove`. No more fling remove while
-dragging; fling anywhere on item to remove it.
-[Leszek Mzyk](https://github.com/imbryk) is a bona fide code-slanger.
-
-**Jan. 10, 2013**: Version 0.5.0 is released. Supports ListView
-multi-choice and single-choice modes thanks to the hard work of
-[Mattias Flodin](https://github.com/mattiasflodin)! Awesome-sauce.
-Check out the new demos.
-
-**Nov. 23, 2012**: Hmmm, what's this? &rarr; [Gittip](https://www.gittip.com/bauerca) :)
-
-**Nov. 17, 2012**: [Drag-Sort Demos](https://play.google.com/store/apps/details?id=com.mobeta.android.demodslv)
-app in Google Play Store!
-
-**Nov. 15, 2012**: Smooth operation! Drops and removals are animated.
-Also, DragSortController now provides a convenience
-click-to-remove feature (see [XML attrs](https://github.com/bauerca/drag-sort-listview#xml-layout-declaration)
-and [RemoveListener](https://github.com/bauerca/drag-sort-listview#dragsortlistviewremovelistener)
-sections).
-
-**Nov. 11, 2012**: Mavenized.
-Thanks to [Andreas Schildbach (Goonie)](https://github.com/Goonie)!
-
-**Oct. 30, 2012**: DragSortCursorAdapter class helps you reorder
-a Cursor-backed ListAdapter. Look at ResourceDragSortCursorAdapter
-and SimpleDragSortCursorAdapter as well in [the API](
-http://bauerca.github.com/drag-sort-listview).
-
-**Oct. 19, 2012**: Public API documentation is up at
-http://bauerca.github.com/drag-sort-listview.
-
-**Oct. 19, 2012**: Refactoring rampage. Backward compatibility is slightly
-broken. New features make it worthwhile :) and include: total floating
-View customization, total control over drag start/stop,
-and a helper class implementing common patterns (long-press to drag,
-fling-to-remove, etc.). Thanks to
-[Dan Hulme (orac)](https://github.com/orac)
-for getting all this rolling!
-Check out the extensively updated demos and usage section below.
-
-**Sept. 26, 2012**: Drag-sorting is now animated! (optional, of course)
-Items slide around underneath the floating (dragged) View.
+I don't intend to add any new features although I may adjust things here and there in the codebase.
 
 Overview
 --------
@@ -62,7 +15,7 @@ Overview
 DragSortListView (DSLV) is an extension of the Android ListView that enables
 drag-and-drop reordering of list items. It is a ~~major overhaul~~ complete
 rewrite of
-the [TouchInterceptor](https://github.com/android/platform_packages_apps_music/blob/master/src/com/android/music/TouchInterceptor.java) (TI) 
+the [TouchInterceptor](https://github.com/android/platform_packages_apps_music/blob/master/src/com/android/music/TouchInterceptor.java) (TI)
 meant to give drag-sorting a polished feel. Some key features are:
 
 1. Clean drag and drop (no visual glitches; I hope!)
@@ -428,9 +381,9 @@ is found in the project tools/ directory.
 To enable, just set the `dslv:track_drag_sort` attribute to
 `"true"` in XML. While drag-sorting on your emulator or device,
 this tracking causes the DSLV to periodically dump its state to
-a file called dslv_state.txt in the device/emulator /sdcard/ directory. 
+a file called dslv_state.txt in the device/emulator /sdcard/ directory.
 
-Navigate to the location of dslv.py, and do 
+Navigate to the location of dslv.py, and do
 
     adb [-e|-d|-s device] pull /sdcard/dslv_state.txt
 
