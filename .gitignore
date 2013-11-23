@@ -16,6 +16,10 @@ target/
 # external libraries
 libs/
 
+# gradle files
+.gradle/
+build/
+
 # Local configuration file (sdk path, etc)
 local.properties
 .gitattributes
