@@ -1,27 +1,22 @@
 package com.mobeta.android.demodslv;
 
-import java.util.Arrays;
-import java.util.ArrayList;
-
 import android.app.ListActivity;
+import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.content.pm.ActivityInfo;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.Intent;
 
-//import com.mobeta.android.demodslv.R;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 
 public class Launcher extends ListActivity {
-
-    //private ArrayAdapter<ActivityInfo> adapter;
-    private MyAdapter adapter;
 
     private ArrayList<ActivityInfo> mActivities = null;
 
@@ -53,11 +48,7 @@ public class Launcher extends ListActivity {
         mActTitles = getResources().getStringArray(R.array.activity_titles);
         mActDescs = getResources().getStringArray(R.array.activity_descs);
 
-        //adapter = new ArrayAdapter<ActivityInfo>(this,
-        //  R.layout.launcher_item, R.id.text, mActivities);
-        adapter = new MyAdapter();
-
-        setListAdapter(adapter);
+        setListAdapter(new MyAdapter());
     }
 
     @Override
@@ -68,21 +59,21 @@ public class Launcher extends ListActivity {
     }
 
     private class MyAdapter extends ArrayAdapter<ActivityInfo> {
-      MyAdapter() {
-        super(Launcher.this, R.layout.launcher_item, R.id.activity_title, mActivities);
-      }
+        MyAdapter() {
+            super(Launcher.this, R.layout.launcher_item, R.id.activity_title, mActivities);
+        }
 
-      @Override
-      public View getView(int position, View convertView, ViewGroup parent) {
-        View v = super.getView(position, convertView, parent);
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            View v = super.getView(position, convertView, parent);
 
-        TextView title = (TextView) v.findViewById(R.id.activity_title);
-        TextView desc = (TextView) v.findViewById(R.id.activity_desc);
+            TextView title = (TextView) v.findViewById(R.id.activity_title);
+            TextView desc = (TextView) v.findViewById(R.id.activity_desc);
 
-        title.setText(mActTitles[position]);
-        desc.setText(mActDescs[position]);
-        return v;
-      }
+            title.setText(mActTitles[position]);
+            desc.setText(mActDescs[position]);
+            return v;
+        }
 
     }
 

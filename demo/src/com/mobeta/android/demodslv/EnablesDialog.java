@@ -1,40 +1,30 @@
 package com.mobeta.android.demodslv;
 
-import com.mobeta.android.dslv.DragSortListView;
-import com.mobeta.android.dslv.DragSortController;
-
-import java.util.ArrayList;
-
-import android.support.v4.app.DialogFragment;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 
 public class EnablesDialog extends DialogFragment {
+
+    private static final String EXTRA_ENABLED_FLAGS = "enabled_flags";
 
     private boolean[] mEnabled;
 
     private EnabledOkListener mListener;
 
-    public EnablesDialog() {
-        super();
-        mEnabled = new boolean[3];
-        mEnabled[0] = true;
-        mEnabled[1] = true;
-        mEnabled[2] = false;
-    }
+    public static EnablesDialog newInstance(boolean drag, boolean sort, boolean remove) {
+        Bundle args = new Bundle();
+        args.putBooleanArray(EXTRA_ENABLED_FLAGS, new boolean[] { drag, sort, remove });
 
-    public EnablesDialog(boolean drag, boolean sort, boolean remove) {
-        super();
-        mEnabled = new boolean[3];
-        mEnabled[0] = drag;
-        mEnabled[1] = sort;
-        mEnabled[2] = remove;
+        EnablesDialog frag = new EnablesDialog();
+        frag.setArguments(args);
+        return frag;
     }
 
     public interface EnabledOkListener {
-        public void onEnabledOkClick(boolean drag, boolean sort, boolean remove);
+        void onEnabledOkClick(boolean drag, boolean sort, boolean remove);
     }
 
     public void setEnabledOkListener(EnabledOkListener l) {
@@ -43,6 +33,11 @@ public class EnablesDialog extends DialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
+        mEnabled = getArguments().getBooleanArray(EXTRA_ENABLED_FLAGS);
+        if (mEnabled == null) {
+            mEnabled = new boolean[] { true, true, false };
+        }
+
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         // Set the dialog title
         builder.setTitle(R.string.select_remove_mode)

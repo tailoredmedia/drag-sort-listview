@@ -1,28 +1,22 @@
 package com.mobeta.android.demodslv;
 
-import java.util.Arrays;
-import java.util.ArrayList;
-
-import android.support.v4.app.FragmentActivity;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.app.ListFragment;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.MenuInflater;
-import android.os.Bundle;
-import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
-import com.mobeta.android.dslv.DragSortListView;
+import android.view.MenuItem;
+
 import com.mobeta.android.dslv.DragSortController;
+import com.mobeta.android.dslv.DragSortListView;
 
 
-public class TestBedDSLV extends FragmentActivity implements
-RemoveModeDialog.RemoveOkListener,
-DragInitModeDialog.DragOkListener,
-EnablesDialog.EnabledOkListener
-{
+public class TestBedDSLV extends FragmentActivity implements RemoveModeDialog.RemoveOkListener,
+        DragInitModeDialog.DragOkListener, EnablesDialog.EnabledOkListener {
+
+    private static final String TAG_DSLV_FRAGMENT = "dslv_fragment";
 
     private int mNumHeaders = 0;
     private int mNumFooters = 0;
@@ -33,15 +27,16 @@ EnablesDialog.EnabledOkListener
     private boolean mSortEnabled = true;
     private boolean mDragEnabled = true;
 
-    private String mTag = "dslvTag";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.test_bed_main);
 
-        if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction().add(R.id.test_bed, getNewDslvFragment(), mTag).commit();
+        FragmentManager fm = getSupportFragmentManager();
+        if (fm.findFragmentByTag(TAG_DSLV_FRAGMENT) == null) {
+            fm.beginTransaction()
+                    .add(R.id.test_bed, getNewDslvFragment(), TAG_DSLV_FRAGMENT)
+                    .commit();
         }
     }
 
@@ -56,14 +51,17 @@ EnablesDialog.EnabledOkListener
     public void onRemoveOkClick(int removeMode) {
         if (removeMode != mRemoveMode) {
             mRemoveMode = removeMode;
-            getSupportFragmentManager().beginTransaction().replace(R.id.test_bed, getNewDslvFragment(), mTag).commit();
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.test_bed, getNewDslvFragment(), TAG_DSLV_FRAGMENT)
+                    .commit();
         }
     }
 
     @Override
     public void onDragOkClick(int dragStartMode) {
         mDragStartMode = dragStartMode;
-        DSLVFragment f = (DSLVFragment) getSupportFragmentManager().findFragmentByTag(mTag);
+        DSLVFragment f =
+                (DSLVFragment) getSupportFragmentManager().findFragmentByTag(TAG_DSLV_FRAGMENT);
         f.getController().setDragInitMode(dragStartMode);
     }
 
@@ -72,7 +70,8 @@ EnablesDialog.EnabledOkListener
         mSortEnabled = sort;
         mRemoveEnabled = remove;
         mDragEnabled = drag;
-        DSLVFragment f = (DSLVFragment) getSupportFragmentManager().findFragmentByTag(mTag);
+        DSLVFragment f =
+                (DSLVFragment) getSupportFragmentManager().findFragmentByTag(TAG_DSLV_FRAGMENT);
         DragSortListView dslv = (DragSortListView) f.getListView();
         f.getController().setRemoveEnabled(remove);
         f.getController().setSortEnabled(sort);
@@ -91,43 +90,36 @@ EnablesDialog.EnabledOkListener
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle item selection
-        FragmentTransaction transaction;
-        DSLVFragment f = (DSLVFragment) getSupportFragmentManager().findFragmentByTag(mTag);
-        DragSortListView dslv = (DragSortListView) f.getListView();
-        DragSortController control = f.getController();
-
         switch (item.getItemId()) {
         case R.id.select_remove_mode:
-            RemoveModeDialog rdialog = new RemoveModeDialog(mRemoveMode);
+            RemoveModeDialog rdialog = RemoveModeDialog.newInstance(mRemoveMode);
             rdialog.setRemoveOkListener(this);
             rdialog.show(getSupportFragmentManager(), "RemoveMode");
             return true;
         case R.id.select_drag_init_mode:
-            DragInitModeDialog ddialog = new DragInitModeDialog(mDragStartMode);
+            DragInitModeDialog ddialog = DragInitModeDialog.newInstance(mDragStartMode);
             ddialog.setDragOkListener(this);
             ddialog.show(getSupportFragmentManager(), "DragInitMode");
             return true;
         case R.id.select_enables:
-            EnablesDialog edialog = new EnablesDialog(mDragEnabled, mSortEnabled, mRemoveEnabled);
+            EnablesDialog edialog =
+                    EnablesDialog.newInstance(mDragEnabled, mSortEnabled, mRemoveEnabled);
             edialog.setEnabledOkListener(this);
             edialog.show(getSupportFragmentManager(), "Enables");
             return true;
         case R.id.add_header:
             mNumHeaders++;
-
-            transaction = getSupportFragmentManager().beginTransaction();
-            transaction.replace(R.id.test_bed, getNewDslvFragment(), mTag);
-            transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-            transaction.commit();
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.test_bed, getNewDslvFragment(), TAG_DSLV_FRAGMENT)
+                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                    .commit();
             return true;
         case R.id.add_footer:
             mNumFooters++;
-
-            transaction = getSupportFragmentManager().beginTransaction();
-            transaction.replace(R.id.test_bed, getNewDslvFragment(), mTag);
-            transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-            transaction.commit();
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.test_bed, getNewDslvFragment(), TAG_DSLV_FRAGMENT)
+                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                    .commit();
             return true;
         default:
             return super.onOptionsItemSelected(item);

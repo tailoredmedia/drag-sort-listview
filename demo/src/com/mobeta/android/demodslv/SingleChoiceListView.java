@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import android.app.ListActivity;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ArrayAdapter;
@@ -12,8 +13,7 @@ import android.widget.ListView;
 import com.mobeta.android.dslv.DragSortListView;
 
 
-public class SingleChoiceListView extends ListActivity
-{
+public class SingleChoiceListView extends ListActivity {
     private ArrayAdapter<String> adapter;
 
     private DragSortListView.DropListener onDrop =
@@ -45,7 +45,9 @@ public class SingleChoiceListView extends ListActivity
         
         DragSortListView list = getListView();
         list.setDropListener(onDrop);
-        list.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            list.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+        }
    }
 
     @Override

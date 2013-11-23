@@ -1,25 +1,24 @@
 package com.mobeta.android.demodslv;
 
-import java.util.Arrays;
-import java.util.ArrayList;
-import java.util.List;
-
-import android.os.Bundle;
-import android.content.Context;
 import android.app.ListActivity;
+import android.content.Context;
+import android.graphics.Point;
+import android.graphics.drawable.Drawable;
+import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.MotionEvent;
 import android.widget.BaseAdapter;
-import android.widget.ListView;
 import android.widget.TextView;
-import android.graphics.drawable.Drawable;
-import android.graphics.Point;
-import android.util.Log;
 
-import com.mobeta.android.dslv.DragSortListView;
 import com.mobeta.android.dslv.DragSortController;
+import com.mobeta.android.dslv.DragSortListView;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class Sections extends ListActivity {
 
@@ -150,7 +149,7 @@ public class Sections extends ListActivity {
 
         private int mDivPos;
 
-        private LayoutInflater mInflater;
+        private final LayoutInflater mInflater;
 
         public SectionAdapter(Context context, List<String> names) {
             super();

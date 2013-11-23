@@ -1,67 +1,45 @@
 package com.mobeta.android.demodslv;
 
-import java.util.Arrays;
-import java.util.ArrayList;
-
-import android.support.v4.app.ListFragment;
 import android.app.Activity;
+import android.os.Bundle;
+import android.support.v4.app.ListFragment;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.LayoutInflater;
-import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
-import com.mobeta.android.dslv.DragSortListView;
+
 import com.mobeta.android.dslv.DragSortController;
+import com.mobeta.android.dslv.DragSortListView;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 
 public class DSLVFragment extends ListFragment {
 
-    ArrayAdapter<String> adapter;
+    private ArrayAdapter<String> mAdapter;
 
-    private String[] array;
-    private ArrayList<String> list;
-
-    private DragSortListView.DropListener onDrop =
+    private final DragSortListView.DropListener mDropListener =
             new DragSortListView.DropListener() {
                 @Override
                 public void drop(int from, int to) {
                     if (from != to) {
-                        String item = adapter.getItem(from);
-                        adapter.remove(item);
-                        adapter.insert(item, to);
+                        String item = mAdapter.getItem(from);
+                        mAdapter.remove(item);
+                        mAdapter.insert(item, to);
                     }
                 }
             };
 
-    private DragSortListView.RemoveListener onRemove = 
+    private final DragSortListView.RemoveListener mRemoveListener =
             new DragSortListView.RemoveListener() {
                 @Override
                 public void remove(int which) {
-                    adapter.remove(adapter.getItem(which));
+                    mAdapter.remove(mAdapter.getItem(which));
                 }
             };
-
-    protected int getLayout() {
-        // this DSLV xml declaration does not call for the use
-        // of the default DragSortController; therefore,
-        // DSLVFragment has a buildController() method.
-        return R.layout.dslv_fragment_main;
-    }
-    
-    /**
-     * Return list item layout resource passed to the ArrayAdapter.
-     */
-    protected int getItemLayout() {
-        /*if (removeMode == DragSortController.FLING_LEFT_REMOVE || removeMode == DragSortController.SLIDE_LEFT_REMOVE) {
-            return R.layout.list_item_handle_right;
-        } else */
-    	if (removeMode == DragSortController.CLICK_REMOVE) {
-            return R.layout.list_item_click_remove;
-        } else {
-            return R.layout.list_item_handle_left;
-        }
-    }
 
     private DragSortListView mDslv;
     private DragSortController mController;
@@ -83,27 +61,48 @@ public class DSLVFragment extends ListFragment {
         return f;
     }
 
+    protected int getLayout() {
+        // this DSLV xml declaration does not call for the use
+        // of the default DragSortController; therefore,
+        // DSLVFragment has a buildController() method.
+        return R.layout.dslv_fragment_main;
+    }
+
+    /**
+     * Return list item layout resource passed to the ArrayAdapter.
+     */
+    protected int getItemLayout() {
+        /*if (removeMode == DragSortController.FLING_LEFT_REMOVE || removeMode == DragSortController.SLIDE_LEFT_REMOVE) {
+            return R.layout.list_item_handle_right;
+        } else */
+        if (removeMode == DragSortController.CLICK_REMOVE) {
+            return R.layout.list_item_click_remove;
+        } else {
+            return R.layout.list_item_handle_left;
+        }
+    }
+
     public DragSortController getController() {
         return mController;
     }
 
     /**
      * Called from DSLVFragment.onActivityCreated(). Override to
-     * set a different adapter.
+     * set a different mAdapter.
      */
-    public void setListAdapter() {
-        array = getResources().getStringArray(R.array.jazz_artist_names);
-        list = new ArrayList<String>(Arrays.asList(array));
+    protected void setListAdapter() {
+        String[] array = getResources().getStringArray(R.array.jazz_artist_names);
+        List<String> list = new ArrayList<String>(Arrays.asList(array));
 
-        adapter = new ArrayAdapter<String>(getActivity(), getItemLayout(), R.id.text, list);
-        setListAdapter(adapter);
+        mAdapter = new ArrayAdapter<String>(getActivity(), getItemLayout(), R.id.text, list);
+        setListAdapter(mAdapter);
     }
 
     /**
      * Called in onCreateView. Override this to provide a custom
      * DragSortController.
      */
-    public DragSortController buildController(DragSortListView dslv) {
+    protected DragSortController buildController(DragSortListView dslv) {
         // defaults are
         //   dragStartMode = onDown
         //   removeMode = flingRight
@@ -117,8 +116,6 @@ public class DSLVFragment extends ListFragment {
         return controller;
     }
 
-
-    /** Called when the activity is first created. */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
@@ -138,8 +135,8 @@ public class DSLVFragment extends ListFragment {
 
         mDslv = (DragSortListView) getListView(); 
 
-        mDslv.setDropListener(onDrop);
-        mDslv.setRemoveListener(onRemove);
+        mDslv.setDropListener(mDropListener);
+        mDslv.setRemoveListener(mRemoveListener);
 
         Bundle args = getArguments();
         int headers = 0;

@@ -1,16 +1,16 @@
 package com.mobeta.android.demodslv;
 
-import com.mobeta.android.dslv.DragSortListView;
-import com.mobeta.android.dslv.SimpleDragSortCursorAdapter;
-
+import android.content.Context;
+import android.database.Cursor;
 import android.database.MatrixCursor;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
-import android.database.Cursor;
 import android.widget.Toast;
+
+import com.mobeta.android.dslv.DragSortListView;
+import com.mobeta.android.dslv.SimpleDragSortCursorAdapter;
 
 public class CursorDSLV extends FragmentActivity {
 
@@ -22,8 +22,8 @@ public class CursorDSLV extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.cursor_main);
 
-        String[] cols = {"name"};
-        int[] ids = {R.id.text};
+        String[] cols = { "name" };
+        int[] ids = { R.id.text };
         adapter = new MAdapter(this,
                 R.layout.list_item_click_remove, null, cols, ids, 0);
 
@@ -31,7 +31,7 @@ public class CursorDSLV extends FragmentActivity {
         dslv.setAdapter(adapter);
 
         // build a cursor from the String array
-        MatrixCursor cursor = new MatrixCursor(new String[] {"_id", "name"});
+        MatrixCursor cursor = new MatrixCursor(new String[] { "_id", "name" });
         String[] artistNames = getResources().getStringArray(R.array.jazz_artist_names);
         for (int i = 0; i < artistNames.length; i++) {
             cursor.newRow()
@@ -42,7 +42,7 @@ public class CursorDSLV extends FragmentActivity {
     }
 
     private class MAdapter extends SimpleDragSortCursorAdapter {
-        private Context mContext;
+        private final Context mContext;
 
         public MAdapter(Context ctxt, int rmid, Cursor c, String[] cols, int[] ids, int something) {
             super(ctxt, rmid, c, cols, ids, something);

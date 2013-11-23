@@ -1,22 +1,17 @@
 package com.mobeta.android.demodslv;
 
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Arrays;
-
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import android.widget.TextView;
-import android.os.Bundle;
-import android.widget.Toast;
-import android.view.MotionEvent;
-import android.util.Log;
+import android.widget.ListAdapter;
 
-import com.mobeta.android.dslv.DragSortListView;
 import com.mobeta.android.dslv.DragSortController;
+import com.mobeta.android.dslv.DragSortListView;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class DSLVFragmentBGHandle extends DSLVFragment {
 
@@ -26,31 +21,29 @@ public class DSLVFragmentBGHandle extends DSLVFragment {
     }
 
     @Override
-    public void setListAdapter() {
+    protected void setListAdapter() {
         String[] array = getResources().getStringArray(R.array.jazz_artist_names);
         ArrayList<String> list = new ArrayList<String>(Arrays.asList(array));
-        adapter = new MyAdapter(list);
-        setListAdapter(adapter);
+        setListAdapter(new MyAdapter(list));
     }
 
     @Override
-    public DragSortController buildController(DragSortListView dslv) {
-        MyDSController c = new MyDSController(dslv);
-        return c;
+    protected DragSortController buildController(DragSortListView dslv) {
+        return new MyDSController(dslv);
     }
 
 
     private class MyAdapter extends ArrayAdapter<String> {
       
-      public MyAdapter(List<String> artists) {
-        super(getActivity(), getItemLayout(), R.id.text, artists);
-      }
+        public MyAdapter(List<String> artists) {
+            super(getActivity(), getItemLayout(), R.id.text, artists);
+        }
 
-      public View getView(int position, View convertView, ViewGroup parent) {
-        View v = super.getView(position, convertView, parent);
-        v.getBackground().setLevel(3000);
-        return v;
-      }
+        public View getView(int position, View convertView, ViewGroup parent) {
+            View v = super.getView(position, convertView, parent);
+            v.getBackground().setLevel(3000);
+            return v;
+        }
     }
 
     private class MyDSController extends DragSortController {
@@ -65,7 +58,7 @@ public class DSLVFragmentBGHandle extends DSLVFragment {
 
         @Override
         public View onCreateFloatView(int position) {
-            View v = adapter.getView(position, null, mDslv);
+            View v = getListAdapter().getView(position, null, mDslv);
             v.getBackground().setLevel(10000);
             return v;
         }

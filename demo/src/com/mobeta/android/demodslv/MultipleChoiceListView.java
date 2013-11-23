@@ -1,8 +1,5 @@
 package com.mobeta.android.demodslv;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
 import android.app.ListActivity;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
@@ -10,12 +7,15 @@ import android.widget.ArrayAdapter;
 import com.mobeta.android.dslv.DragSortListView;
 import com.mobeta.android.dslv.DragSortListView.RemoveListener;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 
-public class MultipleChoiceListView extends ListActivity
-{
+
+public class MultipleChoiceListView extends ListActivity {
+
     private ArrayAdapter<String> adapter;
 
-    private DragSortListView.DropListener onDrop =
+    private final DragSortListView.DropListener mDropListener =
         new DragSortListView.DropListener() {
             @Override
             public void drop(int from, int to) {
@@ -29,7 +29,7 @@ public class MultipleChoiceListView extends ListActivity
             }
         };
 
-    private RemoveListener onRemove =
+    private final RemoveListener mRemoveListener =
         new DragSortListView.RemoveListener() {
             @Override
             public void remove(int which) {
@@ -53,8 +53,8 @@ public class MultipleChoiceListView extends ListActivity
         setListAdapter(adapter);
         
         DragSortListView list = getListView();
-        list.setDropListener(onDrop);
-        list.setRemoveListener(onRemove);
+        list.setDropListener(mDropListener);
+        list.setRemoveListener(mRemoveListener);
    }
 
     @Override
