@@ -349,6 +349,24 @@ project in the Package Explorer and select Properties. Pick the "Android" page,
 and click "Add..." from the bottom half. You should see a list including the
 DSLV project as well as any others in your workspace.
 
+### Installation in Android Studio (as of version 0.3.7)
+
+Ideally there would be a copy of this project available in the Maven Central
+repository but since this is a very unofficial fork of the project I am not
+going to go through the process of adding it there. The way I would recommend
+adding this library to your app is by using a git submodule. In the root
+directory of your project you can do something like this:
+```sh
+mkdir libraries
+cd libraries
+git submodule add https://github.com/JayH5/drag-sort-listview.git
+echo "include ':libraries:drag-sort-listview:library'" >> ../settings.gradle
+```
+Then add the following dependency to your build.gradle project:
+```groovy
+compile project(':libraries:drag-sort-listview:library')
+```
+
 Contributing
 ------------
 
