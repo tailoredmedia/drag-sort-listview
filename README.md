@@ -349,7 +349,7 @@ project in the Package Explorer and select Properties. Pick the "Android" page,
 and click "Add..." from the bottom half. You should see a list including the
 DSLV project as well as any others in your workspace.
 
-### Installation in Android Studio (as of version 0.3.7)
+### Installation in Android Studio (as of version 0.4.0)
 
 Ideally there would be a copy of this project available in the Maven Central
 repository but since this is a very unofficial fork of the project I am not
