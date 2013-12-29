@@ -45,7 +45,6 @@ import android.content.SharedPreferences;
 import android.content.res.TypedArray;
 import android.preference.ListPreference;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 
@@ -110,7 +109,6 @@ public class SortableListPreference extends ListPreference {
 			}
 
 			String value = join(values, separator);
-			Log.v(TAG,"Closing: Value="+value);
 			setSummary(prepareSummary(values));
 			setValueAndEvent(value);
 		}
@@ -145,7 +143,6 @@ public class SortableListPreference extends ListPreference {
 			value = joinedDefaultValue;
 		}
 
-		Log.v(TAG,"Initial Value="+value);
 		setSummary(prepareSummary(Arrays.asList(decodeValue(value,separator))));
 		setValueAndEvent(value);
 	}
@@ -210,7 +207,6 @@ public class SortableListPreference extends ListPreference {
 		}
 
 		CharSequence[] restoredValues=restoreEntries();
-		Log.v(TAG,"restoredValue="+restoredValues);
 		for (CharSequence value:restoredValues)
 		{
 			mAdapter.add(entries[getValueIndex(value)]);
@@ -220,8 +216,7 @@ public class SortableListPreference extends ListPreference {
 			@Override
 			public void drop(int from, int to) {
 				CharSequence item = mAdapter.getItem(from);
-//				Log.v(TAG,"Moving item "+item+" from "+from+" to "+to);
-                
+              
                 mAdapter.remove(item);
                 mAdapter.insert(item, to);
                 mAdapter.notifyDataSetChanged();
