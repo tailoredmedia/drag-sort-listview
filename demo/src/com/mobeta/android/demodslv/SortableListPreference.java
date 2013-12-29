@@ -55,18 +55,11 @@ import com.mobeta.android.dslv.DragSortListView.DropListener;
 
 import android.app.AlertDialog.Builder;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnMultiChoiceClickListener;
 import android.content.res.TypedArray;
 import android.preference.ListPreference;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
-import android.widget.CheckedTextView;
 
 public class SortableListPreference extends ListPreference {
 	private static final String TAG=SortableListPreference.class.getName();
@@ -150,7 +143,6 @@ public class SortableListPreference extends ListPreference {
 			for (int i = 0; i < entryValues.length; i++) {
 				String val = (String) mAdapter.getItem(i);
 				boolean isChecked=mListView.isItemChecked(i);
-				Log.v(TAG,"Item "+val+" ischecked="+isChecked);
 				if (isChecked)
 				{
 					values.add(entryValues[getValueTitleIndex(val)]);
@@ -247,9 +239,7 @@ public class SortableListPreference extends ListPreference {
 	private CharSequence[] restoreEntries() {
 		
 		ArrayList<CharSequence> orderedList=new ArrayList<CharSequence>();
-		
-		Log.v(TAG,"Initial Value="+getValue());
-		
+
 		int ix=0;
 		//Initially populated with all of the values in the determined list. 
 		for (CharSequence value:decodeValue(getValue(),separator))
