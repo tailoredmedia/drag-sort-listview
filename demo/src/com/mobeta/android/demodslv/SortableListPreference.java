@@ -1,3 +1,34 @@
+/* 
+ * Original Source: https://github.com/kd7uiy/drag-sort-listview
+ * 
+ * The MIT License (MIT)
+ * 
+ * Copyright (c) 2013 The Making of a Ham, http://www.kd7uiy.com
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ * 
+ * Code snippets copied from the following sources:
+ * https://gist.github.com/cardil/4754571
+ * 
+ * 
+ */
+
 package com.mobeta.android.demodslv;
 
 import java.util.ArrayList;
@@ -10,16 +41,12 @@ import com.mobeta.android.dslv.DragSortListView.DropListener;
 
 import android.app.AlertDialog.Builder;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
-import android.content.DialogInterface.OnMultiChoiceClickListener;
 import android.content.SharedPreferences;
 import android.content.res.TypedArray;
 import android.preference.ListPreference;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 
 public class SortableListPreference extends ListPreference {
@@ -29,7 +56,6 @@ public class SortableListPreference extends ListPreference {
 	ArrayAdapter<CharSequence> mAdapter;
 	
 	private static final String DEFAULT_SEPARATOR = "\u0001\u0007\u001D\u0007\u0001";
-	private boolean[] entryChecked = new boolean[getEntries().length];;
 	String separator;
 
 	public static CharSequence[] decodeValue(String input)
@@ -55,7 +81,6 @@ public class SortableListPreference extends ListPreference {
 	protected void onBindDialogView(View view)
 	{
 		super.onBindDialogView(view);
-		ViewGroup group=(ViewGroup)view;
 		//Update the view with the values of the preference
 		SharedPreferences prefs = getSharedPreferences();
 		mListView= (DragSortListView) view.findViewById(android.R.id.list);
@@ -69,19 +94,31 @@ public class SortableListPreference extends ListPreference {
 		{
 			mAdapter =new ArrayAdapter<CharSequence>(mListView.getContext(),android.R.layout.simple_list_item_1,order);
 		}
-		Log.v(TAG,"Setting adapter");
 		mListView.setAdapter(mAdapter);
 	}
 	
 	@Override
-	public void onDialogClosed(boolean positiveResult)
-	{
-		super.onDialogClosed(positiveResult);
+	protected void onDialogClosed(boolean positiveResult) {
+		List<CharSequence> values = new ArrayList<CharSequence>();
+
+		CharSequence[] entryValues = getEntryValues();
+		if (positiveResult && entryValues != null) {
+			for (int i = 0; i < entryValues.length; i++) {
+				String val = (String) mAdapter.getItem(i);
+				
+				values.add(entryValues[getValueTitleIndex(val)]);
+			}
+
+			String value = join(values, separator);
+			Log.v(TAG,"Closing: Value="+value);
+			setSummary(prepareSummary(values));
+			setValueAndEvent(value);
+		}
 	}
 	
 	private void setValueAndEvent(String value) {
 		if (callChangeListener(decodeValue(value,separator))) {
-			persistString(value);
+			setValue(value);
 		}
 	}
 	
@@ -108,6 +145,7 @@ public class SortableListPreference extends ListPreference {
 			value = joinedDefaultValue;
 		}
 
+		Log.v(TAG,"Initial Value="+value);
 		setSummary(prepareSummary(Arrays.asList(decodeValue(value,separator))));
 		setValueAndEvent(value);
 	}
@@ -115,15 +153,49 @@ public class SortableListPreference extends ListPreference {
 	private String prepareSummary(List<CharSequence> joined) {
 		List<String> titles = new ArrayList<String>();
 		CharSequence[] entryTitle = getEntries();
-		CharSequence[] entryValues = getEntryValues();
-		int ix = 0;
-		for (CharSequence value : entryValues) {
-			if (joined.contains(value)) {
-				titles.add((String) entryTitle[ix]);
-			}
-			ix += 1;
+		for (CharSequence item : joined) {
+			int ix=getValueIndex(item);
+			titles.add((String) entryTitle[ix]);
 		}
 		return join(titles, ", ");
+	}
+	
+	public int getValueIndex(CharSequence item)
+	{
+		CharSequence[] entryValues = getEntryValues();
+		int ix=0;
+		boolean found=false;
+		for (CharSequence value:entryValues)
+		{
+			if (value.equals(item))
+			{
+				found=true;
+				break;
+			}
+			ix+=1;
+		}
+		if (!found)
+			throw new IllegalArgumentException(item+" not found in value list");
+		return ix;
+	}
+	
+	public int getValueTitleIndex(CharSequence item)
+	{
+		CharSequence[] entries = getEntries();
+		int ix=0;
+		boolean found=false;
+		for (CharSequence value:entries)
+		{
+			if (value.equals(item))
+			{
+				found=true;
+				break;
+			}
+			ix+=1;
+		}
+		if (!found)
+			throw new IllegalArgumentException(item+" not found in value title list");
+		return ix;
 	}
 	
 	@Override
@@ -137,39 +209,31 @@ public class SortableListPreference extends ListPreference {
 							+ "array which are both the same length");
 		}
 
-		restoreEntries();
-
-		for (CharSequence entry:entries)
-			mAdapter.add(entry);
+		CharSequence[] restoredValues=restoreEntries();
+		Log.v(TAG,"restoredValue="+restoredValues);
+		for (CharSequence value:restoredValues)
+		{
+			mAdapter.add(entries[getValueIndex(value)]);
+		}
 		mListView.setDropListener(new DropListener()
 		{
 			@Override
 			public void drop(int from, int to) {
-				
 				CharSequence item = mAdapter.getItem(from);
 //				Log.v(TAG,"Moving item "+item+" from "+from+" to "+to);
                 
                 mAdapter.remove(item);
                 mAdapter.insert(item, to);
                 mAdapter.notifyDataSetChanged();
+                
 			}
 			
 		});
 	}
 	
-	private void restoreEntries() {
-		CharSequence[] entryValues = getEntryValues();
-
-		// Explode the string read in sharedpreferences
-		CharSequence[] vals = decodeValue(getValue(),separator);
-
-		if (vals != null) {
-			List<CharSequence> valuesList = Arrays.asList(vals);
-			for (int i = 0; i < entryValues.length; i++) {
-				CharSequence entry = entryValues[i];
-				entryChecked[i] = valuesList.contains(entry);
-			}
-		}
+	private CharSequence[] restoreEntries() {
+		CharSequence[] orderedList=decodeValue(getValue(),separator);
+		return orderedList;
 	}
 	
 	/**

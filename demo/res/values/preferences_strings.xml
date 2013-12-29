@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="pref_name_values">
-		<item>Value 1</item>
-		<item>Value 2</item>
-		<item>Value 3</item>
+		<item>Bob</item>
+		<item>Fred</item>
+		<item>George</item>
 	</string-array>
 	<string-array name="pref_name_titles">
-		<item>Bob</item>
-		<item>George</item>
-		<item>Fred</item>
+		<item>Bob Menwaldo</item>
+		<item>Fred Frankfurd</item>
+		<item>George Stephanopolis</item>
 	</string-array>
 	<string-array name="pref_name_defaults">
+		<item>George</item>
 		<item>Fred</item>
 		<item>Bob</item>
-		<item>George</item>
 	</string-array>
 	<string name="pref_name_selection">Name Order Preference</string>
 	<string name="pref_header_test">Test</string>
