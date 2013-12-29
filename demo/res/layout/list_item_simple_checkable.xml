@@ -9,6 +9,7 @@
     android:background="@drawable/drag"
     android:layout_width="wrap_content"
     android:layout_height="@dimen/item_height"
+    android:contentDescription="@string/drag_item"
     android:layout_weight="0" />
   <CheckedTextView
     android:checkMark="?android:attr/listChoiceIndicatorMultiple"

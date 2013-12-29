@@ -302,4 +302,6 @@
       <item>Zimbabwe</item>
     </string-array>
       <string name="settings">Settings</string>
+      <string name="drag_item">Drag Item</string>
+      <string name="remove_item">Remove Item</string>
 </resources>
