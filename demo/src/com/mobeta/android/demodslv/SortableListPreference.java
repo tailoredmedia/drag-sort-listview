@@ -75,7 +75,6 @@ public class SortableListPreference extends ListPreference {
 	public SortableListPreference(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		separator = DEFAULT_SEPARATOR;
-		setPersistent(false);
 		setDialogLayoutResource(R.layout.sort_list_array_dialog_preference);
 		entryChecked = new HashMap<CharSequence,Boolean>();
 	}
