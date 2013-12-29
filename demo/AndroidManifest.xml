@@ -46,5 +46,6 @@
 
         <activity android:name="SingleChoiceListView"
                   android:label="Single-choice list" />
+        <activity android:name="MainSettingsActivity"></activity>
     </application>
 </manifest>

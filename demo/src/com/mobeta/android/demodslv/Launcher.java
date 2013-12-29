@@ -6,6 +6,8 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -14,7 +16,6 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-
 
 public class Launcher extends ListActivity {
 
@@ -34,12 +35,16 @@ public class Launcher extends ListActivity {
             "com.mobeta.android.demodslv", PackageManager.GET_ACTIVITIES);
 
           mActivities = new ArrayList<ActivityInfo>(Arrays.asList(pi.activities));
-          String ourName = getClass().getName();
+          String[] excludeList = new String[]{getClass().getName(),
+        		  MainSettingsActivity.class.getName()};
           for (int i = 0; i < mActivities.size(); ++i) {
-              if (ourName.equals(mActivities.get(i).name)) {
-                  mActivities.remove(i);
-                  break;
-              }
+        	  for (String name: excludeList)
+        	  {
+	              if (name.equals(mActivities.get(i).name)) {
+	                  mActivities.remove(i);
+	                  break;
+	              }
+        	  }
           }
         } catch (PackageManager.NameNotFoundException e) {
           // Do nothing. Adapter will be empty.
@@ -76,5 +81,27 @@ public class Launcher extends ListActivity {
         }
 
     }
+    
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.activity_menu, menu);
+		
+		return true;
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+	    // Handle item selection
+		Intent intent;
+	    switch (item.getItemId()) {
+	        case R.id.menu_settings:
+	            intent =new Intent(this,MainSettingsActivity.class);
+	            startActivity(intent);
+	            return true;
+	        default:
+	            return super.onOptionsItemSelected(item);
+	    }
+	}
 
 }
