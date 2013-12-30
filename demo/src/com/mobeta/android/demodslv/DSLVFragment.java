@@ -3,7 +3,6 @@ package com.mobeta.android.demodslv;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -149,7 +148,6 @@ public class DSLVFragment extends ListFragment {
             footers = args.getInt("footers", 0);
         }
         
-        Log.v("DSLV","Adding Footers");
 
         for (int i = 0; i < headers; i++) {
             addHeader(getActivity(), mDslv);
