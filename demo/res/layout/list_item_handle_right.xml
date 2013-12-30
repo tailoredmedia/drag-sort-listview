@@ -14,6 +14,7 @@
     android:paddingLeft="8dp" />
   <ImageView
     android:id="@id/drag_handle"
+    android:contentDescription="@string/drag_item"
     android:background="@drawable/drag"
     android:layout_width="wrap_content"
     android:layout_height="@dimen/item_height"

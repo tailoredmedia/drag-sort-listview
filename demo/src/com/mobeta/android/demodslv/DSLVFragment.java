@@ -3,6 +3,7 @@ package com.mobeta.android.demodslv;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -94,6 +95,7 @@ public class DSLVFragment extends ListFragment {
         String[] array = getResources().getStringArray(R.array.jazz_artist_names);
         List<String> list = new ArrayList<String>(Arrays.asList(array));
 
+
         mAdapter = new ArrayAdapter<String>(getActivity(), getItemLayout(), R.id.text, list);
         setListAdapter(mAdapter);
     }
@@ -129,7 +131,8 @@ public class DSLVFragment extends ListFragment {
         return mDslv;
     }
 
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
@@ -145,6 +148,8 @@ public class DSLVFragment extends ListFragment {
             headers = args.getInt("headers", 0);
             footers = args.getInt("footers", 0);
         }
+        
+        Log.v("DSLV","Adding Footers");
 
         for (int i = 0; i < headers; i++) {
             addHeader(getActivity(), mDslv);
@@ -154,6 +159,7 @@ public class DSLVFragment extends ListFragment {
         }
 
         setListAdapter();
+        mAdapter=(ArrayAdapter<String>) getListAdapter();
     }
 
 

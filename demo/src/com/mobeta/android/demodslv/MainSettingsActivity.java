@@ -30,7 +30,6 @@ import java.util.List;
  * API Guide</a> for more information on developing a Settings UI.
  */
 public class MainSettingsActivity extends PreferenceActivity{
-	private static final String TAG="Settings";
 	/**
 	 * Determines whether to always show the simplified settings UI, where
 	 * settings are presented in a single list. When false, settings are shown
@@ -39,13 +38,16 @@ public class MainSettingsActivity extends PreferenceActivity{
 	 */
 	private static final boolean ALWAYS_SIMPLE_PREFS = false;
 
-	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
+	@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 	@Override
 	protected void onPostCreate(Bundle savedInstanceState) {
 		super.onPostCreate(savedInstanceState);
 		setupSimplePreferencesScreen();
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+		//This doesn't always work right with HoneyComb, so I removed it.
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+		{
 			getActionBar().setDisplayHomeAsUpEnabled(true);
+		}
 	}
 
 	/**
@@ -64,16 +66,15 @@ public class MainSettingsActivity extends PreferenceActivity{
 
 		// Add 'general' preferences.
 		addPreferencesFromResource(R.xml.pref_name);
-		
+
 
 		// Bind the summaries of EditText/List/Dialog/Ringtone preferences to
 		// their values. When their values change, their summaries are updated
 		// to reflect the new value, per the Android Design guidelines.
 		bindPreferenceSummaryToValue(findPreference("name_order"));
-		
+
 	}
 
-	/** {@inheritDoc} */
 	@Override
 	public boolean onIsMultiPane() {
 		return isLargeTablet(this) && !isSimplePreferences(this);
@@ -116,7 +117,7 @@ public class MainSettingsActivity extends PreferenceActivity{
 		@Override
 		public boolean onPreferenceChange(Preference preference, Object value) {
 			String stringValue = value.toString();
-			
+
 			if (preference instanceof ListPreference) {
 				// For list preferences, look up the correct display value in
 				// the preference's 'entries' list.
@@ -125,8 +126,8 @@ public class MainSettingsActivity extends PreferenceActivity{
 
 				// Set the summary to reflect the new value.
 				preference
-						.setSummary(index >= 0 ? listPreference.getEntries()[index]
-								: null);
+				.setSummary(index >= 0 ? listPreference.getEntries()[index]
+						: null);
 			} else {
 				// For all other preferences, set the summary to the value's
 				// simple string representation.
@@ -148,10 +149,9 @@ public class MainSettingsActivity extends PreferenceActivity{
 	private static void bindPreferenceSummaryToValue(Preference preference) {
 		// Set the listener to watch for value changes.
 		preference
-				.setOnPreferenceChangeListener(sBindPreferenceSummaryToValueListener);
+		.setOnPreferenceChangeListener(sBindPreferenceSummaryToValueListener);
 
-		if (preference instanceof CheckBoxPreference)
-		{
+		if (preference instanceof CheckBoxPreference) {
 			// Trigger the listener immediately with the preference's
 			// current value.
 			sBindPreferenceSummaryToValueListener.onPreferenceChange(
@@ -159,9 +159,8 @@ public class MainSettingsActivity extends PreferenceActivity{
 					PreferenceManager.getDefaultSharedPreferences(
 							preference.getContext()).getBoolean(preference.getKey(),false));
 		}
-		else if (preference instanceof EditTextPreference)
-		{
-			
+		else if (preference instanceof EditTextPreference) {
+
 			// Trigger the listener immediately with the preference's
 			// current value.
 			sBindPreferenceSummaryToValueListener.onPreferenceChange(
@@ -169,8 +168,7 @@ public class MainSettingsActivity extends PreferenceActivity{
 					PreferenceManager.getDefaultSharedPreferences(
 							preference.getContext()).getString(preference.getKey(),""));
 		}
-		else if (preference instanceof SortableListPreference)
-		{
+		else if (preference instanceof SortableListPreference) {
 			// Trigger the listener immediately with the preference's
 			// current value.
 			sBindPreferenceSummaryToValueListener.onPreferenceChange(
@@ -178,50 +176,49 @@ public class MainSettingsActivity extends PreferenceActivity{
 					PreferenceManager.getDefaultSharedPreferences(
 							preference.getContext()).getString(preference.getKey(),""));
 		}
-		else
-		{
+		else {
 			throw new IllegalArgumentException("Attempting to bind to unknown type of preference!");
 		}
 	}
-	
+
 	/**
 	 * This fragment shows location update preferences only. It is used when the
 	 * activity is showing a two-pane settings UI.
 	 */
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	public static class NameSelectionPreferenceFragment extends
-			PreferenceFragment {
+	PreferenceFragment {
 		@Override
 		public void onCreate(Bundle savedInstanceState) {
 			super.onCreate(savedInstanceState);
 			addPreferencesFromResource(R.xml.pref_name);
-			
+
 			// Bind the summaries of EditText/List/Dialog/Ringtone preferences
 			// to their values. When their values change, their summaries are
 			// updated to reflect the new value, per the Android Design
 			// guidelines.
-			
+
 			bindPreferenceSummaryToValue(findPreference("name_order"));
 		}
 	}
-	
+
 	@TargetApi(Build.VERSION_CODES.KITKAT)
 	protected boolean isValidFragment (String fragmentName)
 	{
-	  if(MainSettingsActivity.class.getName().equals(fragmentName) || 
-			  NameSelectionPreferenceFragment.class.getName().equals(fragmentName))
-	      return true;
-	  return false;
+		if(MainSettingsActivity.class.getName().equals(fragmentName) || 
+				NameSelectionPreferenceFragment.class.getName().equals(fragmentName))
+			return true;
+		return false;
 	}
-	
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-        case android.R.id.home:
-            NavUtils.navigateUpFromSameTask(this);
-            return true;
-        default:
-            return super.onOptionsItemSelected(item);
-        }
-    }
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case android.R.id.home:
+			NavUtils.navigateUpFromSameTask(this);
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
+		}
+	}
 }

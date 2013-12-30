@@ -1,5 +1,7 @@
 package com.mobeta.android.demodslv;
 
+import java.util.Locale;
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -19,25 +21,25 @@ public class DSLVFragmentClicks extends DSLVFragment {
         return f;
     }
 
-    @Override
+	@Override
     public void onActivityCreated(Bundle savedState) {
         super.onActivityCreated(savedState);
 
         ListView lv = getListView();
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
+			@Override
             public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
                     long arg3) {
-                String message = String.format("Clicked item %d", arg2);
+                String message = String.format(Locale.getDefault(),"Clicked item %d", arg2);
                 Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
                 
             }
         });
         lv.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
+			@Override
             public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int arg2,
                     long arg3) {
-                String message = String.format("Long-clicked item %d", arg2);
+                String message = String.format(Locale.getDefault(),"Long-clicked item %d", arg2);
                 Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
                 return true;
             }

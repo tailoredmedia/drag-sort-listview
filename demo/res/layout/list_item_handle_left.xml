@@ -5,6 +5,7 @@
   android:layout_height="@dimen/item_height"
   android:orientation="horizontal">
   <ImageView
+    android:contentDescription="@string/drag_item"
     android:id="@id/drag_handle"
     android:background="@drawable/drag"
     android:layout_width="wrap_content"

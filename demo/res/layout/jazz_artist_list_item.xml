@@ -23,6 +23,7 @@
   </LinearLayout>
   <ImageView
     android:id="@id/drag_handle"
+    android:contentDescription="@string/drag_item"
     android:background="@drawable/drag"
     android:layout_width="wrap_content"
     android:layout_height="fill_parent"
