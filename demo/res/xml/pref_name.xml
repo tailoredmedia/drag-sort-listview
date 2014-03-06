@@ -1,9 +1,14 @@
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
-	<com.mobeta.android.demodslv.SortableListPreference
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" 
+    xmlns:dslv="http://schemas.android.com/apk/res-auto">
+	<com.mobeta.android.dslv.DragSortListPreference
 		android:defaultValue="@array/pref_name_defaults"
 		android:entries="@array/pref_name_titles"
 		android:entryValues="@array/pref_name_values"
 		android:key="name_order"
 		android:persistent="true"
-		android:title="@string/pref_name_selection" />
+		android:title="@string/pref_name_selection" 
+		dslv:array_adapter_view="@layout/list_item_simple_checkable"
+		dslv:text_field="@id/text"
+		dslv:pref_layout="@layout/sort_list_array_dialog_preference"
+		/>
 </PreferenceScreen>

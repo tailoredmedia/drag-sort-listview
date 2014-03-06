@@ -42,7 +42,7 @@
  * 
  */
 
-package com.mobeta.android.demodslv;
+package com.mobeta.android.dslv;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -50,7 +50,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
-import com.mobeta.android.dslv.DragSortListView;
 import com.mobeta.android.dslv.DragSortListView.DropListener;
 
 import android.app.AlertDialog.Builder;
@@ -58,11 +57,12 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.preference.ListPreference;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 
-public class SortableListPreference extends ListPreference {
-	private static final String TAG=SortableListPreference.class.getName();
+public class DragSortListPreference extends ListPreference {
+	private static final String TAG = DragSortListPreference.class.getName();
 
 	protected DragSortListView mListView;
 	protected ArrayAdapter<CharSequence> mAdapter;
@@ -72,43 +72,72 @@ public class SortableListPreference extends ListPreference {
 
 	private HashMap<CharSequence, Boolean> entryChecked;
 
-	public SortableListPreference(Context context, AttributeSet attrs) {
+	private int mListPreference;
+
+	private int mAdapterView;
+
+	private int mTextField;
+
+	public DragSortListPreference(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		mSeparator = DEFAULT_SEPARATOR;
-		setDialogLayoutResource(R.layout.sort_list_array_dialog_preference);
-		entryChecked = new HashMap<CharSequence,Boolean>();
+		if (attrs != null) {
+			TypedArray a = getContext().obtainStyledAttributes(attrs,
+					R.styleable.DragSortListPreference, 0, 0);
+
+			for (int i = 0; i < attrs.getAttributeCount(); i++) {
+				Log.v(TAG,
+						attrs.getAttributeName(i) + "="
+								+ attrs.getAttributeNameResource(i));
+			}
+
+			mListPreference = a.getResourceId(
+					R.styleable.DragSortListPreference_pref_layout,
+					R.layout.sort_list_array_dialog_preference);
+			mAdapterView = a.getResourceId(
+					R.styleable.DragSortListPreference_array_adapter_view,
+					android.R.layout.simple_list_item_1);
+			mTextField = a.getResourceId(
+					R.styleable.DragSortListPreference_text_field,
+					android.R.id.text1);
+
+			Log.v(TAG, "mListPref=" + mListPreference);
+			Log.v(TAG, "mAdapterView=" + mAdapterView);
+			Log.v(TAG, "mTextField=" + mTextField);
+
+			a.recycle();
+		}
+		setDialogLayoutResource(mListPreference);
+		entryChecked = new HashMap<CharSequence, Boolean>();
 	}
 
-	public static CharSequence[] decodeValue(String input)
-	{
-		return decodeValue(input,DEFAULT_SEPARATOR);
+	public static CharSequence[] decodeValue(String input) {
+		return decodeValue(input, DEFAULT_SEPARATOR);
 	}
 
-	public static CharSequence[] decodeValue(String input,String separator)
-	{
-		if (input==null)
-		{
+	public static CharSequence[] decodeValue(String input, String separator) {
+		if (input == null) {
 			return null;
 		}
 		return input.split(separator);
 	}
 
 	@Override
-	protected void onBindDialogView(View view)
-	{
+	protected void onBindDialogView(View view) {
 		super.onBindDialogView(view);
-		mListView= (DragSortListView) view.findViewById(android.R.id.list);
-		mAdapter =new ArrayAdapter<CharSequence>(mListView.getContext(),R.layout.list_item_simple_checkable,R.id.text);
+		mListView = (DragSortListView) view.findViewById(android.R.id.list);
+		mAdapter = new ArrayAdapter<CharSequence>(mListView.getContext(),
+				mAdapterView, mTextField);
 		mListView.setAdapter(mAdapter);
-		//This will drop the item in the new location
+		// This will drop the item in the new location
 		mListView.setDropListener(new DropListener() {
 			@Override
 			public void drop(int from, int to) {
 				CharSequence item = mAdapter.getItem(from);
 				mAdapter.remove(item);
 				mAdapter.insert(item, to);
-				//Updates checked states
-				mListView.moveCheckState(from,to);  
+				// Updates checked states
+				mListView.moveCheckState(from, to);
 			}
 		});
 		// Setting the default values happens in onPrepareDialogBuilder
@@ -116,6 +145,8 @@ public class SortableListPreference extends ListPreference {
 
 	@Override
 	protected void onPrepareDialogBuilder(Builder builder) {
+		Log.v(TAG, "onPrepareDialogBuilder");
+
 		CharSequence[] entries = getEntries();
 		CharSequence[] entryValues = getEntryValues();
 		if (entries == null || entryValues == null
@@ -125,8 +156,8 @@ public class SortableListPreference extends ListPreference {
 							+ "array which are both the same length");
 		}
 
-		CharSequence[] restoredValues=restoreEntries();
-		for (CharSequence value:restoredValues) {
+		CharSequence[] restoredValues = restoreEntries();
+		for (CharSequence value : restoredValues) {
 			mAdapter.add(entries[getValueIndex(value)]);
 		}
 
@@ -140,7 +171,7 @@ public class SortableListPreference extends ListPreference {
 		if (positiveResult && entryValues != null) {
 			for (int i = 0; i < entryValues.length; i++) {
 				String val = (String) mAdapter.getItem(i);
-				boolean isChecked=mListView.isItemChecked(i);
+				boolean isChecked = mListView.isItemChecked(i);
 				if (isChecked) {
 					values.add(entryValues[getValueTitleIndex(val)]);
 				}
@@ -153,7 +184,7 @@ public class SortableListPreference extends ListPreference {
 	}
 
 	private void setValueAndEvent(String value) {
-		if (callChangeListener(decodeValue(value,mSeparator))) {
+		if (callChangeListener(decodeValue(value, mSeparator))) {
 			setValue(value);
 		}
 	}
@@ -181,7 +212,7 @@ public class SortableListPreference extends ListPreference {
 			value = joinedDefaultValue;
 		}
 
-		setSummary(prepareSummary(Arrays.asList(decodeValue(value,mSeparator))));
+		setSummary(prepareSummary(Arrays.asList(decodeValue(value, mSeparator))));
 		setValueAndEvent(value);
 	}
 
@@ -189,59 +220,58 @@ public class SortableListPreference extends ListPreference {
 		List<String> titles = new ArrayList<String>();
 		CharSequence[] entryTitle = getEntries();
 		for (CharSequence item : joined) {
-			int ix=getValueIndex(item);
+			int ix = getValueIndex(item);
 			titles.add((String) entryTitle[ix]);
 		}
 		return join(titles, ", ");
 	}
 
-	public int getValueIndex(CharSequence item)
-	{
+	public int getValueIndex(CharSequence item) {
 		CharSequence[] entryValues = getEntryValues();
 		for (int i = 0; i < entryValues.length; i++) {
 			if (entryValues[i].equals(item)) {
 				return i;
 			}
 		}
-		throw new IllegalStateException(item+" not found in value list");
+		throw new IllegalStateException(item + " not found in value list");
 	}
 
-	public int getValueTitleIndex(CharSequence item)
-	{
+	public int getValueTitleIndex(CharSequence item) {
 		CharSequence[] entries = getEntries();
 		for (int i = 0; i < entries.length; i++) {
 			if (entries[i].equals(item)) {
 				return i;
 			}
 		}
-		throw new IllegalStateException(item+" not found in value title list");
+		throw new IllegalStateException(item + " not found in value title list");
 	}
 
 	private CharSequence[] restoreEntries() {
 
-		ArrayList<CharSequence> orderedList=new ArrayList<CharSequence>();
+		ArrayList<CharSequence> orderedList = new ArrayList<CharSequence>();
 
-		//Initially populated with all of the values in the determined list. 
+		// Initially populated with all of the values in the determined list.
 		CharSequence[] values = decodeValue(getValue(), mSeparator);
-		for (int ix=0;ix<values.length;ix++) {
-			CharSequence value=values[ix];
+		for (int ix = 0; ix < values.length; ix++) {
+			CharSequence value = values[ix];
 			orderedList.add(value);
-			mListView.setItemChecked(ix,true);
+			mListView.setItemChecked(ix, true);
 		}
 
-		//This loop sets the default states, and adds to the name list if not on the list.
-		for (CharSequence value:getEntryValues()) {
-			entryChecked.put(value,false);
+		// This loop sets the default states, and adds to the name list if not
+		// on the list.
+		for (CharSequence value : getEntryValues()) {
+			entryChecked.put(value, false);
 			if (!orderedList.contains(value)) {
 				orderedList.add(value);
 			}
 		}
-		for (CharSequence value:orderedList) {
+		for (CharSequence value : orderedList) {
 			if (entryChecked.containsKey(value)) {
-				entryChecked.put(value,true);
-			}
-			else {
-				throw new IllegalArgumentException("Invalid value "+value+" in key list");
+				entryChecked.put(value, true);
+			} else {
+				throw new IllegalArgumentException("Invalid value " + value
+						+ " in key list");
 			}
 		}
 		return orderedList.toArray(new CharSequence[0]);
@@ -249,14 +279,14 @@ public class SortableListPreference extends ListPreference {
 
 	/**
 	 * Joins array of object to single string by separator
-	 *
+	 * 
 	 * Credits to kurellajunior on this post
 	 * http://snippets.dzone.com/posts/show/91
-	 *
+	 * 
 	 * @param iterable
-	 * any kind of iterable ex.: <code>["a", "b", "c"]</code>
+	 *            any kind of iterable ex.: <code>["a", "b", "c"]</code>
 	 * @param separator
-	 * Separates entries ex.: <code>","</code>
+	 *            Separates entries ex.: <code>","</code>
 	 * @return joined string ex.: <code>"a,b,c"</code>
 	 */
 	protected static String join(Iterable<?> iterable, String separator) {

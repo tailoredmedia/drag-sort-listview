@@ -17,7 +17,6 @@ import android.view.MenuItem;
 
 import java.util.List;
 
-
 /**
  * A {@link PreferenceActivity} that presents a set of application settings. On
  * handset devices, settings are presented as a single list. On tablets,
@@ -29,7 +28,7 @@ import java.util.List;
  * href="http://developer.android.com/guide/topics/ui/settings.html">Settings
  * API Guide</a> for more information on developing a Settings UI.
  */
-public class MainSettingsActivity extends PreferenceActivity{
+public class SettingsActivity extends PreferenceActivity {
 	/**
 	 * Determines whether to always show the simplified settings UI, where
 	 * settings are presented in a single list. When false, settings are shown
@@ -71,7 +70,6 @@ public class MainSettingsActivity extends PreferenceActivity{
 		// Bind the summaries of EditText/List/Dialog/Ringtone preferences to
 		// their values. When their values change, their summaries are updated
 		// to reflect the new value, per the Android Design guidelines.
-		bindPreferenceSummaryToValue(findPreference("name_order"));
 
 	}
 
@@ -168,14 +166,6 @@ public class MainSettingsActivity extends PreferenceActivity{
 					PreferenceManager.getDefaultSharedPreferences(
 							preference.getContext()).getString(preference.getKey(),""));
 		}
-		else if (preference instanceof SortableListPreference) {
-			// Trigger the listener immediately with the preference's
-			// current value.
-			sBindPreferenceSummaryToValueListener.onPreferenceChange(
-					preference,
-					PreferenceManager.getDefaultSharedPreferences(
-							preference.getContext()).getString(preference.getKey(),""));
-		}
 		else {
 			throw new IllegalArgumentException("Attempting to bind to unknown type of preference!");
 		}
@@ -197,15 +187,13 @@ public class MainSettingsActivity extends PreferenceActivity{
 			// to their values. When their values change, their summaries are
 			// updated to reflect the new value, per the Android Design
 			// guidelines.
-
-			bindPreferenceSummaryToValue(findPreference("name_order"));
 		}
 	}
 
 	@TargetApi(Build.VERSION_CODES.KITKAT)
 	protected boolean isValidFragment (String fragmentName)
 	{
-		if(MainSettingsActivity.class.getName().equals(fragmentName) || 
+		if(SettingsActivity.class.getName().equals(fragmentName) || 
 				NameSelectionPreferenceFragment.class.getName().equals(fragmentName))
 			return true;
 		return false;

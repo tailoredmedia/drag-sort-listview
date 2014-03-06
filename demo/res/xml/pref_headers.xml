@@ -4,6 +4,6 @@
     <!-- These settings headers are only used on tablets. -->
 
 	<header
-	    android:fragment="com.mobeta.android.demodslv.MainSettingsActivity$NameSelectionPreferenceFragment"
+	    android:fragment="com.mobeta.android.demodslv.SettingsActivity$NameSelectionPreferenceFragment"
 	    android:title="@string/pref_header_test"/>
 </preference-headers>

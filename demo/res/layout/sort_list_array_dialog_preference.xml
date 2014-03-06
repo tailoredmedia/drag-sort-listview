@@ -5,7 +5,8 @@
 	android:focusableInTouchMode="false" android:layout_width="match_parent"
 	android:layout_height="match_parent" android:layout_margin="3dp"
 	android:choiceMode="multipleChoice" dslv:sort_enabled="true"
-	dslv:remove_enabled="false" dslv:drag_handle_id="@id/drag_handle" />
+	dslv:remove_enabled="false" 
+	dslv:drag_handle_id="@id/drag_handle" />
     
 
 

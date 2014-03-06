@@ -36,7 +36,7 @@ public class Launcher extends ListActivity {
 
 			mActivities = new ArrayList<ActivityInfo>(Arrays.asList(pi.activities));
 			String[] excludeList = new String[]{getClass().getName(),
-					MainSettingsActivity.class.getName()};
+					SettingsActivity.class.getName()};
 			for (int i = 0; i < mActivities.size(); ++i) {
 				for (String name: excludeList) {
 					if (name.equals(mActivities.get(i).name)) {
@@ -78,7 +78,6 @@ public class Launcher extends ListActivity {
 			desc.setText(mActDescs[position]);
 			return v;
 		}
-
 	}
 
 	@Override
@@ -95,7 +94,7 @@ public class Launcher extends ListActivity {
 		Intent intent;
 		switch (item.getItemId()) {
 		case R.id.menu_settings:
-			intent =new Intent(this,MainSettingsActivity.class);
+			intent =new Intent(this,SettingsActivity.class);
 			startActivity(intent);
 			return true;
 		default:
