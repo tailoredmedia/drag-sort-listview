@@ -122,6 +122,7 @@ public class DragSortController extends SimpleFloatViewManager implements View.O
         mFlingRemoveDetector = new GestureDetector(dslv.getContext(), mFlingRemoveListener);
         mFlingRemoveDetector.setIsLongpressEnabled(false);
         mTouchSlop = ViewConfiguration.get(dslv.getContext()).getScaledTouchSlop();
+        mTouchSlop *= 4;
         mDragHandleId = dragHandleId;
         mClickRemoveId = clickRemoveId;
         mFlingHandleId = flingHandleId;
